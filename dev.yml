@@ -67,8 +67,15 @@
              value=false
 
     - name: dconf nautilus show-desktop-icons
+      tags: gui
       dconf: user={{ user }}
              key=/org/gnome/desktop/background/show-desktop-icons
+             value=false
+
+    - name: dconf show cursor when running gnome-settings-daemon
+      tags: gui
+      dconf: user={{ user }}
+             key=/org/gnome/settings-daemon/plugins/cursor/active
              value=false
 
     # Ruby
