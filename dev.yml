@@ -1,0 +1,21 @@
+---
+- hosts: local
+  tasks:
+
+    - name: Everyday packages
+      apt: name={{ item }} state=present
+      with_items:
+        - aptitude
+        - autojump
+        - dotfiles
+        - exuberant-ctags
+        - git
+        - silversearcher-ag
+        - vim
+
+    - name: GUI Packages
+      tags: gui
+      apt: name={{ item }} state=present
+      with_items:
+        - i3wm
+
