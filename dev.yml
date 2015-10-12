@@ -1,5 +1,5 @@
 ---
-- hosts: local
+- hosts: localhost
   tasks:
 
     - name: Everyday packages
@@ -7,7 +7,6 @@
       with_items:
         - aptitude
         - autojump
-        - dotfiles
         - exuberant-ctags
         - git
         - silversearcher-ag
@@ -17,5 +16,23 @@
       tags: gui
       apt: name={{ item }} state=present
       with_items:
-        - i3wm
+        - i3
+        - i3blocks
+
+    - name: Development Packages
+      apt: name={{ item }} state=present
+      with_items:
+        - rake
+        - ruby2.1
+        - ruby2.1-dev
+
+    # Home directory setup
+
+    - name: Cloning dotfiles
+      sudo: yes
+      sudo_user: charles
+      git: repo=https://github.com/zorab47/dotfiles.git
+           dest=/home/charles/.dotfiles
+           accept_hostkey=yes
+
 
