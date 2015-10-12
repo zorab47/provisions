@@ -19,6 +19,7 @@
         - git-extras
         - shellcheck
         - silversearcher-ag
+        - tmux
         - vim
 
     # GUI
