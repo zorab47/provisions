@@ -1,6 +1,13 @@
+# sudo ansible -i "localhost," -c local dev.yml
 ---
 - hosts: localhost
   tasks:
+
+    - name: Add neovim PPA repository
+      apt_repository: repo='ppa:neovim-ppa/unstable'
+
+    - name: Neovim
+      apt: name=neovim
 
     - name: Everyday packages
       apt: name={{ item }} state=present
@@ -9,12 +16,25 @@
         - autojump
         - exuberant-ctags
         - git
+        - git-extras
+        - shellcheck
         - silversearcher-ag
         - vim
 
+    # GUI
+    # ---
+
+    - name: Add sur5r.net GPG key
+      tags: gui
+      apt_key: id=0x941c42e6 keyserver=keyserver.ubuntu.com
+
+    - name: Add i3wm repository
+      tags: gui
+      apt_repository: repo='deb http://debian.sur5r.net/i3/ {{ ansible_distribution_release }} universe'
+
     - name: GUI Packages
       tags: gui
-      apt: name={{ item }} state=present
+      apt: name={{ item }} state=latest
       with_items:
         - i3
         - i3blocks
@@ -27,12 +47,18 @@
         - ruby2.1-dev
 
     # Home directory setup
+    # --------------------
 
     - name: Cloning dotfiles
       sudo: yes
       sudo_user: charles
       git: repo=https://github.com/zorab47/dotfiles.git
            dest=/home/charles/.dotfiles
+           update=no
            accept_hostkey=yes
+
+    - name: Update font caches
+      shell: fc-cache -f creates=/home/charles/.cache/fontconfig
+
 
 
