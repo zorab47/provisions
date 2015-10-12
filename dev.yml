@@ -21,6 +21,7 @@
         - silversearcher-ag
         - tmux
         - vim
+        - dos2unix
 
     # Neovim
     # ------
