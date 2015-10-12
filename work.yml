@@ -1,6 +1,7 @@
 # sudo ansible -i "localhost," -c local work.yml
 ---
 - hosts: localhost
+  connection: local
   tasks:
 
     - name: HipChat GPG key
@@ -39,3 +40,16 @@
                dest=/tmp/rstudio-amd64.deb
                validate_certs=no
 
+    - name: VirtualBox GPG key
+      tags: virtualbox
+      apt_key: url=https://www.virtualbox.org/download/oracle_vbox.asc state=present
+
+    - name: VirtualBox repo
+      tags: virtualbox
+      apt_repository: repo='deb http://download.virtualbox.org/virtualbox/debian vivid contrib'
+
+    - name: VirtualBox
+      tags: virtualbox
+      apt: name={{ item }} state=latest
+      with_items:
+        - virtualbox-5.0

@@ -58,6 +58,7 @@
       with_items:
         - i3
         - i3blocks
+        - rxvt-unicode-256color
 
     - name: dconf gnome-terminal default-show-menubar
       tags: gui
@@ -102,6 +103,13 @@
         - ruby2.1
         - ruby2.1-dev
         - libxml2
+
+    - name: Rubygems
+      tags: ruby
+      gem: name={{ item }}
+      with_items:
+        - doing
+
 
     # Home directory setup
     # --------------------
