@@ -1,0 +1,30 @@
+# sudo ansible -i "localhost," -c local dev.yml
+---
+- hosts: localhost
+  tasks:
+
+    - name: Add CRAN GPG key
+      tags: R
+      apt_key: id=0xE084DAB9 keyserver=keyserver.ubuntu.com
+
+    - name: Add CRAN repository
+      tags: R
+      apt_repository: repo='deb http://cran.rstudio.com/bin/linux/ubuntu {{ ansible_distribution_release }}/'
+
+    - name: Install R
+      tags: R
+      apt: name={{ item }} state=latest
+      with_items:
+        - r-base
+
+    - name: RStudio dependencies
+      tags: R
+      apt: name={{ item }} state=latest
+      with_items:
+        - libjpeg62
+
+    - name: RStudio Download
+      get_url: url=https://download1.rstudio.org/rstudio-0.99.484-amd64.deb
+               dest=/tmp/rstudio-amd64.deb
+               validate_certs=no
+
