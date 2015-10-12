@@ -169,3 +169,13 @@
             src=/opt/blink1/linux/51-blink1.rules
             state=link
 
+
+    # YubiKey
+    # -------
+
+    - name: Yubikey udev rules
+      tags: yubikey
+      get_url: url=https://raw.githubusercontent.com/Yubico/libu2f-host/master/70-u2f.rules
+               dest=/etc/udev/rules.d/70-u2f.rules
+               mode=0644
+               sha256sum=417ac20cfdf034a63ed7ebf01f8000fab9a53b5ff2882ca1802770885baa7eeb
