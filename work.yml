@@ -2,6 +2,10 @@
 ---
 - hosts: localhost
   connection: local
+
+  vars:
+    rstudio_version: 0.99.484-amd64
+
   tasks:
 
     - name: HipChat GPG key
@@ -16,6 +20,8 @@
       tags: hipchat
       apt: name=hipchat state=latest
 
+    # R
+
     - name: Add CRAN GPG key
       tags: R
       apt_key: id=0xE084DAB9 keyserver=keyserver.ubuntu.com
@@ -28,17 +34,25 @@
       tags: R
       apt: name=r-base state=latest
 
+    # RStudio
+
     - name: RStudio dependencies
-      tags: R
+      tags: rstudio
       apt: name={{ item }} state=latest
       with_items:
         - libjpeg62
 
-    - name: RStudio Download
-      tags: R
-      get_url: url=https://download1.rstudio.org/rstudio-0.99.484-amd64.deb
-               dest=/tmp/rstudio-amd64.deb
+    - name: RStudio downloading version {{ rstudio_version }}
+      tags: rstudio
+      get_url: url=https://download1.rstudio.org/rstudio-{{ rstudio_version }}.deb
+               dest=/opt/rstudio-{{ rstudio_version }}.deb
                validate_certs=no
+
+    - name: Install RStudio
+      tags: rstudio
+      apt: deb=/opt/rstudio-{{ rstudio_version }}.deb
+
+    # VirtualBox
 
     - name: VirtualBox GPG key
       tags: virtualbox
