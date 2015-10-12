@@ -25,9 +25,7 @@
 
     - name: Install R
       tags: R
-      apt: name={{ item }} state=latest
-      with_items:
-        - r-base
+      apt: name=r-base state=latest
 
     - name: RStudio dependencies
       tags: R
@@ -36,6 +34,7 @@
         - libjpeg62
 
     - name: RStudio Download
+      tags: R
       get_url: url=https://download1.rstudio.org/rstudio-0.99.484-amd64.deb
                dest=/tmp/rstudio-amd64.deb
                validate_certs=no
