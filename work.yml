@@ -1,7 +1,19 @@
-# sudo ansible -i "localhost," -c local dev.yml
+# sudo ansible -i "localhost," -c local work.yml
 ---
 - hosts: localhost
   tasks:
+
+    - name: HipChat GPG key
+      tags: hipchat
+      apt_key: url=https://www.hipchat.com/keys/hipchat-linux.key
+
+    - name: HipChat repository
+      tags: hipchat
+      apt_repository: repo='deb http://downloads.hipchat.com/linux/apt stable main'
+
+    - name: Install HipChat
+      tags: hipchat
+      apt: name=hipchat state=latest
 
     - name: Add CRAN GPG key
       tags: R
