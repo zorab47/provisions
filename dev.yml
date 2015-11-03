@@ -37,10 +37,10 @@
       sudo_user: "{{ user }}"
       file: path=/home/{{ user }}/.nvimrc src=/home/{{ user }}/.vimrc state=link
 
-    - name: Symlink .nvim to .vim
+    - name: Symlink .vim to .config/nvim
       sudo: yes
       sudo_user: "{{ user }}"
-      file: path=/home/{{ user }}/.nvim src=/home/{{ user }}/.vim state=link
+      file: path=/home/{{ user }}/.config/nvim src=/home/{{ user }}/.vim state=link
 
     # GUI
     # ---
