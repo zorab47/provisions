@@ -59,7 +59,9 @@
       with_items:
         - i3
         - i3blocks
+        - j4-dmenu-desktop
         - rxvt-unicode-256color
+        - compton
 
     - name: dconf gnome-terminal default-show-menubar
       tags: gui
