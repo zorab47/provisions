@@ -13,15 +13,16 @@
       with_items:
         - aptitude
         - autojump
+        - dos2unix
         - exuberant-ctags
         - git
         - git-extras
+        - gksu
         - ranger
         - shellcheck
         - silversearcher-ag
         - tmux
         - vim
-        - dos2unix
 
     # Neovim
     # ------
