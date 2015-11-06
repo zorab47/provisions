@@ -18,6 +18,7 @@
         - git
         - git-extras
         - gksu
+        - gpicview
         - ranger
         - shellcheck
         - silversearcher-ag
