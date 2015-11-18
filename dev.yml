@@ -83,6 +83,20 @@
              key=/org/gnome/settings-daemon/plugins/cursor/active
              value=false
 
+    # Better Font Rendering
+    # http://www.webupd8.org/2013/06/better-font-rendering-in-linux-with.html
+
+    - name: Add Infinality repository for FreeType font rendering patches
+      tags: gui
+      apt_repository: repo='ppa:no1wantdthisname/ppa'
+
+    - name: Install infinality package
+      tags: gui
+      apt: name={{ item }} state=latest
+      with_items:
+        - fontconfig-infinality
+
+
     # Ruby
     # ----
 
