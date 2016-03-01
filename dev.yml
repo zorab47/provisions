@@ -24,6 +24,15 @@
         - silversearcher-ag
         - tmux
         - vim
+        - xsel
+        - zsh
+
+    - name: Embellishments
+      apt: name={{ item }} state=present
+      with_items:
+        - lolcat       # Colorful outputs!
+        - toilet       # Big terminal text
+        - toilet-fonts
 
     # Neovim
     # ------
@@ -61,7 +70,7 @@
       with_items:
         - i3
         - i3blocks
-        - j4-dmenu-desktop
+        - j4-dmenu-desktop # only Wily Werewolf
         - rxvt-unicode-256color
         - compton
 
@@ -96,6 +105,16 @@
       with_items:
         - fontconfig-infinality
 
+    # jrnl
+    # ----
+
+    - name: Install Python PIP
+      apt: name={{ item }} state=latest
+      with_items:
+        - python-pip
+
+    - name: Install jrnl
+      pip: name=jrnl
 
     # Ruby
     # ----
@@ -135,7 +154,6 @@
       gem: name={{ item }}
       with_items:
         - doing
-
 
     # Home directory setup
     # --------------------
