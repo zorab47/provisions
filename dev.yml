@@ -47,11 +47,13 @@
       sudo: yes
       sudo_user: "{{ user }}"
       file: path=/home/{{ user }}/.nvimrc src=/home/{{ user }}/.vimrc state=link
+      ignore_errors: yes
 
     - name: Symlink .vim to .config/nvim
       sudo: yes
       sudo_user: "{{ user }}"
       file: path=/home/{{ user }}/.config/nvim src=/home/{{ user }}/.vim state=link
+      ignore_errors: yes
 
     # GUI
     # ---
