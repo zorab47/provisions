@@ -68,11 +68,11 @@
       tags: gui
       apt: name={{ item }} state=latest
       with_items:
+        - compton
         - i3
         - i3blocks
-        - j4-dmenu-desktop # only Wily Werewolf
-        - rxvt-unicode-256color
-        - compton
+        - j4-dmenu-desktop # only Wily Werewolf or newer
+        - rofi
 
     - name: dconf gnome-terminal default-show-menubar
       tags: gui
@@ -145,8 +145,8 @@
       apt: name={{ item }} state=present
       with_items:
         - rake
-        - ruby2.1
-        - ruby2.1-dev
+        - ruby
+        - ruby-dev
         - libxml2
 
     - name: Rubygems
