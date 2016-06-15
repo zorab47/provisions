@@ -25,7 +25,7 @@
         - tmux
         - vim
         - xsel
-        - zsh
+        - fish
 
     - name: Embellishments
       apt: name={{ item }} state=present
