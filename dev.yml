@@ -180,6 +180,22 @@
     - name: Update font caches
       shell: fc-cache -f creates=/home/{{ user }}/.cache/fontconfig
 
+    # fzf, command-line fuzzy finder
+    # ------------------------------
+
+    - name: Cloning fzf
+      sudo: yes
+      sudo_user: "{{ user }}"
+      git: repo=https://github.com/junegunn/fzf.git
+           dest=/home/{{ user }}/.fzf
+           update=no
+           accept_hostkey=yes
+
+    - name: Install fzf
+      sudo: yes
+      sudo_user: "{{ user }}"
+      shell: ~/.fzf/install
+
     # ThingM Blink(1)
     # ---------------
 
