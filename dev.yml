@@ -78,21 +78,30 @@
 
     - name: dconf gnome-terminal default-show-menubar
       tags: gui
+      sudo: yes
+      sudo_user: "{{ user }}"
       dconf: user={{ user }}
              key=/org/gnome/terminal/legacy/default-show-menubar
              value=false
+      ignore_errors: yes
 
     - name: dconf nautilus show-desktop-icons
       tags: gui
+      sudo: yes
+      sudo_user: "{{ user }}"
       dconf: user={{ user }}
              key=/org/gnome/desktop/background/show-desktop-icons
              value=false
+      ignore_errors: yes
 
     - name: dconf show cursor when running gnome-settings-daemon
       tags: gui
+      sudo: yes
+      sudo_user: "{{ user }}"
       dconf: user={{ user }}
              key=/org/gnome/settings-daemon/plugins/cursor/active
              value=false
+      ignore_errors: yes
 
     # Better Font Rendering
     # http://www.webupd8.org/2013/06/better-font-rendering-in-linux-with.html
