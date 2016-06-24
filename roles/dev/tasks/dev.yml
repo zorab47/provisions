@@ -1,0 +1,235 @@
+---
+- name: Everyday packages
+  apt: name={{ item }} state=present
+  with_items:
+    - aptitude
+    - autojump
+    - dos2unix
+    - exuberant-ctags
+    - git
+    - git-extras
+    - gksu
+    - gpicview
+    - ranger
+    - shellcheck
+    - silversearcher-ag
+    - tmux
+    - vim
+    - xsel
+    - fish
+
+- name: Embellishments
+  apt: name={{ item }} state=present
+  with_items:
+    - lolcat       # Colorful outputs!
+    - toilet       # Big terminal text
+    - toilet-fonts
+
+# Neovim
+# ------
+
+- name: Add neovim PPA repository
+  apt_repository: repo='ppa:neovim-ppa/unstable'
+
+- name: Neovim
+  apt: name=neovim
+
+- name: Symlink .nvimrc to .vimrc
+  sudo: yes
+  sudo_user: "{{ user }}"
+  file: path=/home/{{ user }}/.nvimrc src=/home/{{ user }}/.vimrc state=link
+  ignore_errors: yes
+
+- name: Symlink .vim to .config/nvim
+  sudo: yes
+  sudo_user: "{{ user }}"
+  file: path=/home/{{ user }}/.config/nvim src=/home/{{ user }}/.vim state=link
+  ignore_errors: yes
+
+# GUI
+# ---
+
+- name: Add sur5r.net GPG key
+  tags: gui
+  apt_key: id=0x941c42e6 keyserver=keyserver.ubuntu.com
+
+- name: Add i3wm repository
+  tags: gui
+  apt_repository: repo='deb http://debian.sur5r.net/i3/ {{ ansible_distribution_release }} universe'
+
+- name: GUI Packages
+  tags: gui
+  apt: name={{ item }} state=latest
+  with_items:
+    - compton
+    - i3
+    - i3blocks
+    - j4-dmenu-desktop # only Wily Werewolf or newer
+    - rofi
+
+- name: dconf gnome-terminal default-show-menubar
+  tags: gui
+  sudo: yes
+  sudo_user: "{{ user }}"
+  dconf: user={{ user }}
+          key=/org/gnome/terminal/legacy/default-show-menubar
+          value=false
+  ignore_errors: yes
+
+- name: dconf nautilus show-desktop-icons
+  tags: gui
+  sudo: yes
+  sudo_user: "{{ user }}"
+  dconf: user={{ user }}
+          key=/org/gnome/desktop/background/show-desktop-icons
+          value=false
+  ignore_errors: yes
+
+- name: dconf show cursor when running gnome-settings-daemon
+  tags: gui
+  sudo: yes
+  sudo_user: "{{ user }}"
+  dconf: user={{ user }}
+          key=/org/gnome/settings-daemon/plugins/cursor/active
+          value=false
+  ignore_errors: yes
+
+# Better Font Rendering
+# http://www.webupd8.org/2013/06/better-font-rendering-in-linux-with.html
+
+- name: Add Infinality repository for FreeType font rendering patches
+  tags: gui
+  apt_repository: repo='ppa:no1wantdthisname/ppa'
+
+- name: Install infinality package
+  tags: gui
+  apt: name={{ item }} state=latest
+  with_items:
+    - fontconfig-infinality
+
+# jrnl
+# ----
+
+- name: Install Python PIP
+  apt: name={{ item }} state=latest
+  with_items:
+    - python-pip
+
+- name: Install jrnl
+  pip: name=jrnl
+
+# Ruby
+# ----
+
+- name: Base development packages
+  apt: name={{ item }} state=present
+  with_items:
+    - autoconf
+    - automake
+    - bison
+    - build-essential
+    - curl
+    - libreadline6
+    - libreadline6-dev
+    - libsqlite3-dev
+    - libssl-dev
+    - libxml2-dev
+    - libxslt1-dev
+    - libyaml-dev
+    - openssl
+    - pkg-config
+    - zlib1g
+    - zlib1g-dev
+    - libpq-dev
+
+- name: Ruby and dev packages
+  tags: ruby
+  apt: name={{ item }} state=present
+  with_items:
+    - rake
+    - ruby
+    - ruby-dev
+    - libxml2
+
+- name: Rubygems
+  tags: ruby
+  gem: name={{ item }}
+  with_items:
+    - doing
+
+# Home directory setup
+# --------------------
+
+- name: Cloning dotfiles
+  sudo: yes
+  sudo_user: "{{ user }}"
+  git: repo=https://github.com/zorab47/dotfiles.git
+        dest=/home/{{ user }}/.dotfiles
+        update=no
+        accept_hostkey=yes
+
+- name: Update font caches
+  shell: fc-cache -f creates=/home/{{ user }}/.cache/fontconfig
+
+# fzf, command-line fuzzy finder
+# ------------------------------
+
+- name: Cloning fzf
+  sudo: yes
+  sudo_user: "{{ user }}"
+  git: repo=https://github.com/junegunn/fzf.git
+        dest=/home/{{ user }}/.fzf
+        update=no
+        accept_hostkey=yes
+
+- name: Install fzf
+  sudo: yes
+  sudo_user: "{{ user }}"
+  shell: ~/.fzf/install
+
+# ThingM Blink(1)
+# ---------------
+
+- name: blink(1) dependencies
+  tags: blink1
+  apt: name={{ item }} state=latest
+  with_items:
+    - libusb-1.0-0-dev
+
+- name: Cloning ThingM/blink1 repo
+  tags: blink1
+  git: repo=https://github.com/ThingM/blink1.git
+        dest=/opt/blink1
+        recursive=no
+        depth=10
+        update=no
+        accept_hostkey=yes
+
+- name: Make blink(1)
+  tags: blink1
+  shell: make
+          chdir=/opt/blink1/commandline
+          creates=/opt/blink1/commandline/blink1-tool
+
+- name: Symlink binary to /usr/bin/blink1
+  tags: blink1
+  file: path=/usr/bin/blink1
+        src=/opt/blink1/commandline/blink1-tool
+        state=link
+
+- name: Symlink udev rules 51-blink1.rules
+  tags: blink1
+  file: path=/etc/udev/rules.d/51-blink1.rules
+        src=/opt/blink1/linux/51-blink1.rules
+        state=link
+
+
+# YubiKey
+# -------
+
+- name: Yubikey udev rules
+  tags: yubikey
+  get_url: url=https://raw.githubusercontent.com/Yubico/libu2f-host/b615174e23af2f71f03e216699a42523b4ea0f64/70-u2f.rules
+            dest=/etc/udev/rules.d/70-u2f.rules
+            mode=0644
+            sha256sum=20e13fa477a624398013cdab01cf8e6763844514269ae085d06310e9b66476cc

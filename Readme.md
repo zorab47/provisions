@@ -7,7 +7,7 @@ Installation
 ------------
 
 1. `sudo apt-get install ansible`
-2. `sudo ansible-playbook -i "localhost," -c local ./dev.yml`
+2. `ansible-playbook -i inventory --ask-sudo=pass dev.yml`
 
 Tools
 -----
