@@ -66,6 +66,7 @@
     - i3blocks
     - j4-dmenu-desktop # only Wily Werewolf or newer
     - rofi
+    - scrot
 
 - name: dconf gnome-terminal default-show-menubar
   tags: gui
