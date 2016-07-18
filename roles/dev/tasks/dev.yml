@@ -62,6 +62,7 @@
   apt: name={{ item }} state=latest
   with_items:
     - compton
+    - diodon # multi-clipboard
     - i3
     - i3blocks
     - j4-dmenu-desktop # only Wily Werewolf or newer
