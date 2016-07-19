@@ -1,24 +1,15 @@
-# sudo ansible -i "localhost," -c local work.yml
+# ansible-playbook --ask-sudo-pass -i "localhost," -c local work.yml
 ---
 - hosts: localhost
   connection: local
+
+  become_user: root
+  become: true
 
   vars:
     rstudio_version: 0.99.484-amd64
 
   tasks:
-
-    - name: HipChat GPG key
-      tags: hipchat
-      apt_key: url=https://www.hipchat.com/keys/hipchat-linux.key
-
-    - name: HipChat repository
-      tags: hipchat
-      apt_repository: repo='deb http://downloads.hipchat.com/linux/apt stable main'
-
-    - name: Install HipChat
-      tags: hipchat
-      apt: name=hipchat state=latest
 
     # R
 
@@ -33,6 +24,26 @@
     - name: Install R
       tags: R
       apt: name=r-base state=latest
+
+    # TODO: Fixing unknown error R failing when run through Ansible, but
+    #       commands function properly on the command line.
+    #
+    # - name: R dependencies
+    #   shell: Rscript -e "if (!('{{ item }}' %in% installed.packages()[,'Package'])) { install.packages('{{ item }}', repos='http://cran.rstudio.com/', quiet=TRUE); }; if (!('{{ item }}' %in% installed.packages()[,'Package'])) { stop('{{ item }} was NOT installed'); };"
+    #   with_items:
+    #     - SDMTools
+    #     - weights
+    #     - ggplot2
+    #     - zoo
+    #     - dplyr
+    #     - forecast
+    #     - fitdistrplus
+    #     - fpc
+    #     - truncdist
+    #     - dgof
+    #
+    # sudo R -e "if (!('devtools' %in% installed.packages()[,'Package'])) { install.packages('devtools', repos='http://cran.rstudio.com/', quiet=TRUE); }; if (!('devtools' %in% installed.packages()[,'Package'])) { stop('devtools was NOT installed'); };"
+    # sudo R --quiet -e "if(!('osmutil' %in% installed.packages()[, 'Package'])) { devtools::install_git('git@git.orm-tech.com:ORM/osmutil.git', branch = 'v1.0.0', quiet=TRUE); }; if (!('osmutil' %in% installed.packages()[,'Package'])) { stop('osmutil was NOT installed'); };"
 
     # RStudio
 
@@ -54,16 +65,8 @@
 
     # VirtualBox
 
-    - name: VirtualBox GPG key
-      tags: virtualbox
-      apt_key: url=https://www.virtualbox.org/download/oracle_vbox.asc state=present
-
-    - name: VirtualBox repo
-      tags: virtualbox
-      apt_repository: repo='deb http://download.virtualbox.org/virtualbox/debian vivid contrib'
-
     - name: VirtualBox
       tags: virtualbox
       apt: name={{ item }} state=latest
       with_items:
-        - virtualbox-5.0
+        - virtualbox

@@ -16,6 +16,8 @@
     - tmux
     - vim
     - xsel
+    # TODO: Add more recent version of Fish:
+    #       https://launchpad.net/~fish-shell/+archive/ubuntu/release-2
     - fish
 
 - name: Embellishments
