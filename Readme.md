@@ -6,8 +6,9 @@ A set of software tools automatically installed via Ansible.
 Installation
 ------------
 
-1. `sudo apt-get install ansible`
-2. `ansible-playbook -i inventory --ask-sudo=pass dev.yml`
+1. Change the username in `roles/dev/vars/main.yml` to your username
+2. Install Ansible: `sudo apt-get install ansible`
+3. Run the installation `ansible-playbook -i inventory --ask-sudo=pass dev.yml`
 
 Tools
 -----
