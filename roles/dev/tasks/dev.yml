@@ -191,7 +191,7 @@
   sudo_user: "{{ user }}"
   shell: ~/.fzf/install
 
-# ThingM Blink(1)
+# Blink(1)
 # ---------------
 
 - name: blink(1) dependencies
@@ -200,9 +200,9 @@
   with_items:
     - libusb-1.0-0-dev
 
-- name: Cloning ThingM/blink1 repo
+- name: Cloning todbot/blink1 repo
   tags: blink1
-  git: repo=https://github.com/ThingM/blink1.git
+  git: repo=https://github.com/todbot/blink1.git
         dest=/opt/blink1
         recursive=no
         depth=10
